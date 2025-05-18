@@ -1,4 +1,8 @@
 # palbi-calculator
+This is a open-link. 
+https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
+
+
 Below is a single English prompt you can paste into Deep-Research with GitHub-API scope.
 Place this in README.md—nothing else.
 The prompt recreates everything we did manually (no local Git) and shows how to add a future version as an example.
