@@ -8,8 +8,8 @@ This is a open-link.
 
 **This is a conversation log with ChatGPT o3.**
 
+https://chatgpt.com/share/6829fa08-702c-8006-a9aa-bbfe17ffd63d
 
-https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
 
   
 
@@ -35,8 +35,8 @@ Lines beginning with # are explanatory comments for the agent.
 
 This is the link that I made this README for the palbi-calculator in English and Japanese.
 
+https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
 
-https://chatgpt.com/share/6829fa08-702c-8006-a9aa-bbfe17ffd63d
 
 
 SYSTEM:
