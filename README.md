@@ -1,6 +1,19 @@
 # palbi-calculator
 This is a open-link. 
+最新版 https://masayukifukumoto.github.io/palbi-calculator/
+旧版  https://masayukifukumoto.github.io/palbi-calculator/2025.05/
+
+This is a conversation log with ChatGPT o3.
 https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
+
+
+
+
+
+
+
+
+
 
 
 Below is a single English prompt you can paste into Deep-Research with GitHub-API scope.
@@ -9,7 +22,7 @@ The prompt recreates everything we did manually (no local Git) and shows how to 
 Lines beginning with # are explanatory comments for the agent.
 
 
-This is the link that I made this palbi-calculator in English and Japanese.
+This is the link that I made this README for the palbi-calculator in English and Japanese.
 https://chatgpt.com/share/6829fa08-702c-8006-a9aa-bbfe17ffd63d
 
 SYSTEM:
