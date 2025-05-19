@@ -1,20 +1,29 @@
 # palbi-calculator
 This is a open-link. 
-最新版 https://masayukifukumoto.github.io/palbi-calculator/
-旧版  https://masayukifukumoto.github.io/palbi-calculator/2025.05/
 
-This is a conversation log with ChatGPT o3.
+**最新版** https://masayukifukumoto.github.io/palbi-calculator/
+
+**旧版**  https://masayukifukumoto.github.io/palbi-calculator/2025.05/
+
+
+**This is a conversation log with ChatGPT o3.**
 https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
 
+  
+
+  
+
+  
+
+  
 
 
 
+  
 
 
 
-
-
-
+    
 
 Below is a single English prompt you can paste into Deep-Research with GitHub-API scope.
 Place this in README.md—nothing else.
