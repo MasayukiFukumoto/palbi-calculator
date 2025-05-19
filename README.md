@@ -7,6 +7,8 @@ This is a open-link.
 
 
 **This is a conversation log with ChatGPT o3.**
+
+
 https://github.com/MasayukiFukumoto/palbi-calculator/blob/main/README.md#palbi-calculator
 
   
