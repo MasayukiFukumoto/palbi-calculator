@@ -34,7 +34,10 @@ Lines beginning with # are explanatory comments for the agent.
 
 
 This is the link that I made this README for the palbi-calculator in English and Japanese.
+
+
 https://chatgpt.com/share/6829fa08-702c-8006-a9aa-bbfe17ffd63d
+
 
 SYSTEM:
 You are OpenAI Deep-Research with GitHub-API scope.
