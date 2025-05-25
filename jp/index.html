@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>長崎大学肝臓外科版 PALBI Calculator v2025-05</title>
+<title>長崎大学肝臓外科版 PALBI計算ツール v2025-05</title>
 
 <!-- レスポンシブ & シンプル UI -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -97,8 +97,8 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 </section>
 
 <footer>
-  長崎大学肝臓外科版 PALBI Calculator v2025-05<br>
-  © Susumu Eguchi & Masayuki Fukumoto
+  長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>
+  © 福本将之、江口 晋
 </footer>
 
 <script>
@@ -180,7 +180,7 @@ function saveHist(){ localStorage.setItem(keyHist,JSON.stringify(history)); }
 
 /* ===== 計算ロジック ===== */
 document.getElementById("calcBtn").onclick=()=>{
-  const bili=parseFloat(bili.value), alb=parseFloat(alb.value), plt=parseFloat(plt.value);
+  js\nconst bili = parseFloat(document.getElementById('bili').value),\n alb = parseFloat(document.getElementById('alb').value),\n plt = parseFloat(document.getElementById('plt').value);\n
   if([bili,alb,plt].some(isNaN)){ alert("値を全て入力してください"); return; }
   // 単位変換
   const bili_umol=bili*17.1, alb_gL=alb*10, plt_1000=plt*10;
