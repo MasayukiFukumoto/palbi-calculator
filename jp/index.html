@@ -37,7 +37,7 @@
 <nav>
   <button data-page="calc"   class="active">計算</button>
   <button data-page="about">PALBIとは</button>
-  <button data-page="refs">References</button>
+  <button data-page="refs">参考文献</button>
   <button data-page="history">履歴</button>
   <button id="langBtn">English</button>
 </nav>
@@ -54,18 +54,6 @@
   <div id="zones">
     <div class="zone" id="z1">低値</div><div class="zone" id="z2">中間</div><div class="zone" id="z3">高値</div>
   </div>
-
-  <!-- caption & table -->
-  <p id="tblCaption" hidden>ログイン履歴・計算履歴および平均値</p>
-  <table id="statsTable" hidden>
-    <thead><tr><th></th><th id="th-vis">ログイン履歴</th><th id="th-calc">計算履歴</th><th id="th-avg">平均</th></tr></thead>
-    <tbody>
-      <tr><td id="td-bili">ビリルビン</td><td colspan="2"></td><td id="avgBili"></td></tr>
-      <tr><td id="td-alb">アルブミン</td><td colspan="2"></td><td id="avgAlb"></td></tr>
-      <tr><td id="td-plt">血小板数</td><td colspan="2"></td><td id="avgPlt"></td></tr>
-      <tr><td>PALBI</td><td id="vCount"></td><td id="cCount"></td><td id="avgScore"></td></tr>
-    </tbody>
-  </table>
 </section>
 
 <!-- ===== PALBIとは ===== -->
@@ -89,6 +77,18 @@
 <section id="history" class="page" hidden>
   <div id="histNav"><button id="prevHist">&lt; Prev</button><span id="histRange"></span><button id="nextHist">Next &gt;</button></div>
   <ol id="histList" style="font-size:.9rem"></ol>
+
+  <!-- Moved stats caption & table here -->
+  <p id="tblCaption" hidden>ログイン履歴・計算履歴および平均値</p>
+  <table id="statsTable" hidden>
+    <thead><tr><th></th><th id="th-vis">ログイン履歴</th><th id="th-calc">計算履歴</th><th id="th-avg">平均</th></tr></thead>
+    <tbody>
+      <tr><td id="td-bili">ビリルビン</td><td colspan="2"></td><td id="avgBili"></td></tr>
+      <tr><td id="td-alb">アルブミン</td><td colspan="2"></td><td id="avgAlb"></td></tr>
+      <tr><td id="td-plt">血小板数</td><td colspan="2"></td><td id="avgPlt"></td></tr>
+      <tr><td>PALBI</td><td id="vCount"></td><td id="cCount"></td><td id="avgScore"></td></tr>
+    </tbody>
+  </table>
 
   <p id="avgCaption" style="font-size:.85rem;color:#333;margin-top:.6rem">計算回数あたりの平均値</p>
   <table id="avgTable" hidden>
@@ -166,14 +166,14 @@ function renderUI(){
   document.getElementById("z2").textContent=T.mid;
   document.getElementById("z3").textContent=T.high;
   document.getElementById("about-text").innerHTML=T.about;
-  // table headers
+  // table headers & caption
   document.getElementById("th-vis").textContent=T.tbl.login;
   document.getElementById("th-calc").textContent=T.tbl.calc;
   document.getElementById("th-avg").textContent=T.tbl.avg;
   document.getElementById("td-bili").textContent=T.tbl.bili;
   document.getElementById("td-alb").textContent=T.tbl.alb;
   document.getElementById("td-plt").textContent=T.tbl.plt;
-  document.getElementById("tblCaption").textContent=T.tbl.login+"・"+T.tbl.calc+""+T.tbl.avg;
+  document.getElementById("tblCaption").textContent=`${T.tbl.login}・${T.tbl.calc} ${T.tbl.avg}`;
   // history avg caption
   document.getElementById("avgCaption").textContent=T.tbl.avgCaption;
   // history nav buttons & range (range updated later)
