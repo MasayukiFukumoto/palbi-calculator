@@ -10,7 +10,7 @@
  body{max-width:720px;margin:auto;padding:1.5rem}
  h1{color:var(--c1);text-align:center;font-size:1.6rem;margin:0 0 1rem}
  nav{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
- nav button{flex:1 1 120px;border:1px solid var(--c1);background:#fff;color:var(--c1);padding:.4rem;border-radius:4px;cursor:pointer}
+ nav button{flex:1 1 120px;border:1px solid var(--c1);background:#fff;color:#0066cc;padding:.4rem;border-radius:4px;cursor:pointer}
  nav button.active{background:var(--c1);color:#fff}
  label{display:block;margin-top:.8rem}
  input{width:160px;padding:.3rem}
@@ -74,7 +74,7 @@
   <div id="histNav"><button id="prevHist">&lt; Prev</button><span id="histRange"></span><button id="nextHist">Next &gt;</button></div>
   <ol id="histList" style="font-size:.9rem"></ol>
 
-  <p id="tblCaption" hidden>ログイン履歴・計算履歴・平均</p>
+  <p id="tblCaption" hidden></p>
   <table id="statsTable" hidden>
     <thead><tr><th></th><th id="th-vis"></th><th id="th-calc"></th><th id="th-avg"></th></tr></thead>
     <tbody>
@@ -87,8 +87,10 @@
 
   <p id="avgCaption" style="font-size:.85rem;color:#333;margin-top:.6rem"></p>
   <table id="avgTable" hidden>
-    <thead><tr><th></th><th id="th-avgBili"></th><th id="th-avgAlb"></th><th id="th-avgPlt"></th><th id="th-avgScore">PALBI</th></tr></thead>
-    <tbody><tr><td>平均</td><td id="avgBili2"></td><td id="avgAlb2"></td><td id="avgPlt2"></td><td id="avgScore2"></td></tr></tbody>
+    <thead>
+      <tr><th></th><th id="th-avgBili"></th><th id="th-avgAlb"></th><th id="th-avgPlt"></th><th id="th-avgScore">PALBI</th></tr>
+    </thead>
+    <tbody><tr><td>平均 / Avg</td><td id="avgBili2"></td><td id="avgAlb2"></td><td id="avgPlt2"></td><td id="avgScore2"></td></tr></tbody>
   </table>
 </section>
 
@@ -178,15 +180,28 @@ function renderUI(){
   calcBtn.textContent=T.btnCalc;
   z1.textContent=T.low;z2.textContent=T.mid;z3.textContent=T.high;
   about-text.innerHTML=T.about;
-  th-vis.textContent=T.tbl.login;th-calc.textContent=T.tbl.calc;th-avg.textContent=T.tbl.avg;
-  td-bili.textContent=T.tbl.bili;td-alb.textContent=T.tbl.alb;td-plt.textContent=T.tbl.plt;
-  tblCaption.textContent=`${T.tbl.login}・${T.tbl.calc}・${T.tbl.avg}`;
-  avgCaption.textContent=T.tbl.avgCaption;
-  prevHist.textContent=T.histNav.prev;nextHist.textContent=T.histNav.next;
-  langBtn.textContent=T.langBtn;
-  footer.innerHTML=T.footer;
+
+  th-vis.textContent = T.tbl.login;
+  th-calc.textContent= T.tbl.calc;
+  th-avg.textContent = T.tbl.avg;
+
+  td-bili.textContent = T.tbl.bili;
+  td-alb .textContent = T.tbl.alb;
+  td-plt .textContent = T.tbl.plt;
+
+  document.getElementById("th-avgBili").textContent = T.tbl.bili;
+  document.getElementById("th-avgAlb" ).textContent = T.tbl.alb;
+  document.getElementById("th-avgPlt" ).textContent = T.tbl.plt;
+
+  tblCaption.textContent  = `${T.tbl.login}・${T.tbl.calc}・${T.tbl.avg}`;
+  avgCaption.textContent  = T.tbl.avgCaption;
+  prevHist.textContent    = T.histNav.prev;
+  nextHist.textContent    = T.histNav.next;
+  langBtn.textContent     = T.langBtn;
+  footer.innerHTML        = T.footer;
   updateStats();
 }
+
 function updateStats(){
   statsTable.hidden=tblCaption.hidden=false;
   vCount.textContent=stat.visits;
@@ -198,6 +213,7 @@ function updateStats(){
   avgBili2.textContent=avg("sumB");avgAlb2.textContent=avg("sumA");
   avgPlt2.textContent=avg("sumP");avgScore2.textContent=avg("sumS");
 }
+
 const PAGE_SIZE=10;
 prevHist.onclick=()=>{if(currentHistPage<historyPages()-1){currentHistPage++;updateHistory();}};
 nextHist.onclick=()=>{if(currentHistPage>0){currentHistPage--;updateHistory();}};
