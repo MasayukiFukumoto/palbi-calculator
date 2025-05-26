@@ -23,7 +23,6 @@ td,th{border:1px solid #ccc;padding:.3rem;text-align:center;font-size:.9rem}
 footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 @media print{nav,#calcBtn{display:none}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <h1 id="title">PALBI 計算ツール</h1>
@@ -36,38 +35,23 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   <button id="langBtn">English</button>
 </nav>
 
+<!-- ===== 計算 ===== -->
 <section id="calc" class="page">
-  <label id="lb-bili">総ビリルビン (mg/dL):
-    <input type="number" id="bili" step="0.1">
-  </label>
-  <label id="lb-alb">アルブミン (g/dL):
-    <input type="number" id="alb" step="0.1">
-  </label>
-  <label id="lb-plt">血小板数 (万/µL):
-    <input type="number" id="plt" step="1">
-  </label>
+  <label id="lb-bili">総ビリルビン (mg/dL): <input type="number" id="bili" step="0.1"></label>
+  <label id="lb-alb">アルブミン (g/dL): <input type="number" id="alb" step="0.1"></label>
+  <label id="lb-plt">血小板数 (万/µL): <input type="number" id="plt" step="1"></label>
   <button id="calcBtn">計算</button>
 
   <div id="result" style="margin-top:1rem;font-size:1.1rem"></div>
 
   <div id="zones">
-    <div class="zone" id="z1">低値</div>
-    <div class="zone" id="z2">中間</div>
-    <div class="zone" id="z3">高値</div>
+    <div class="zone" id="z1">低値</div><div class="zone" id="z2">中間</div><div class="zone" id="z3">高値</div>
   </div>
 
-  <!-- 1 行説明 -->
   <p id="statsDesc"></p>
 
   <table id="statsTable" hidden>
-    <thead>
-      <tr>
-        <th></th>
-        <th id="th-vis"></th>
-        <th id="th-calc"></th>
-        <th id="th-avg"></th>
-      </tr>
-    </thead>
+    <thead><tr><th></th><th id="th-vis"></th><th id="th-calc"></th><th id="th-avg"></th></tr></thead>
     <tbody>
       <tr><td id="td-bili">ビリルビン</td><td colspan="2"></td><td id="avgBili"></td></tr>
       <tr><td id="td-alb">アルブミン</td><td colspan="2"></td><td id="avgAlb"></td></tr>
@@ -77,10 +61,12 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   </table>
 </section>
 
+<!-- ===== PALBIとは ===== -->
 <section id="about" class="page" hidden>
   <p id="about-text"></p>
 </section>
 
+<!-- ===== Evidence ===== -->
 <section id="evidence" class="page" hidden>
   <ol id="evi-list" style="font-size:.9rem">
     <li>Liu P-H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879-886.</li>
@@ -89,6 +75,7 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   </ol>
 </section>
 
+<!-- ===== 履歴 ===== -->
 <section id="history" class="page" hidden>
   <ol id="histList" style="font-size:.9rem"></ol>
 </section>
@@ -99,6 +86,7 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 </footer>
 
 <script>
+/***** 多言語テキスト *****/
 const TXT={
   jp:{
     menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},
@@ -122,18 +110,18 @@ const TXT={
   }
 };
 
+/***** 初期化 *****/
 let lang=localStorage.getItem("lang")||"jp";
 renderUI();
+addEventHandlers();
 
+/***** UI 再描画 *****/
 function renderUI(){
   const T=TXT[lang];
   document.getElementById("title").textContent=T.title;
+  // メニュー
   const mbtn=document.querySelectorAll("nav button[data-page]");
   ["calc","about","evidence","history"].forEach((k,i)=>mbtn[i].textContent=T.menu[k]);
-
+  // ラベル
   document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
-  document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels.alb+" ";
-  document.getElementById("lb-plt").childNodes[0].nodeValue=T.labels.plt+" ";
-  document.getElementById("calcBtn").textContent=T.btnCalc;
-  document.getElementById("z1").textContent=T.low;
-  document.getElementById("z2
+  document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels
