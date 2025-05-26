@@ -1,7 +1,7 @@
 # palbi-calculator
 This is a open-link. 
 
-**最新版** https://masayukifukumoto.github.io/palbi-calculator/
+**最新版** https://masayukifukumoto.github.io/palbi-calculator/jp/
 
 **旧版**  https://masayukifukumoto.github.io/palbi-calculator/2025.05/
 
