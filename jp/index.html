@@ -9,14 +9,15 @@
 body{max-width:720px;margin:auto;padding:1.5rem}
 h1{color:var(--c1);text-align:center;font-size:1.6rem;margin:0 0 1rem}
 nav{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
-nav button{flex:1 1 120px;border:1px solid var(--c1);background:#fff;color:var(--c1);padding:.4rem;border-radius:4px;cursor:pointer}
+nav button{flex:1 1 120px;border:1px solid var(--c1);background:#fff;color:var(--c1);padding:.4rem;border-radius:4px;cursor:pointer;transition:background .2s}
 nav button.active{background:var(--c1);color:#fff}
 label{display:block;margin-top:.8rem}
 input{width:160px;padding:.3rem}
-#calcBtn{margin-top:1rem;padding:.5rem 1.2rem;background:var(--c1);color:#fff;border:none;border-radius:4px;cursor:pointer}
+#calcBtn{margin-top:1rem;padding:.5rem 1.2rem;background:var(--c1);color:#fff;border:none;border-radius:4px;cursor:pointer;transition:background .2s}
+#calcBtn:hover{background:#004a99}
 #zones{margin-top:1rem;text-align:center}
 .zone{display:inline-block;width:30%;padding:.4rem;font-weight:bold;color:#fff;border-radius:4px}
-#z1{background:var(--c2)}#z2{background:var(--c3)}#z3{background:var(--c4)}.active{box-shadow:0 0 14px 4px #000}
+#z1{background:var(--c2)}#z2{background:var(--c3)}#z3{background:var(--c4)}.active{box-shadow:0 0 14px 4px rgba(0,0,0,.2)}
 #statsDesc{margin-top:.6rem;margin-bottom:.2rem;font-weight:600;text-align:center;font-size:.9rem}
 table{border-collapse:collapse;margin-top:.4rem;width:100%}
 td,th{border:1px solid #ccc;padding:.3rem;text-align:center;font-size:.9rem}
@@ -28,7 +29,7 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 <h1 id="title">PALBI 計算ツール</h1>
 
 <nav id="menu">
-  <button data-page="calc" class="active">計算</button>
+  <button data-page="calc"   class="active">計算</button>
   <button data-page="about">PALBIとは</button>
   <button data-page="evidence">Evidence</button>
   <button data-page="history">履歴</button>
@@ -51,7 +52,9 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   <p id="statsDesc"></p>
 
   <table id="statsTable" hidden>
-    <thead><tr><th></th><th id="th-vis"></th><th id="th-calc"></th><th id="th-avg"></th></tr></thead>
+    <thead>
+      <tr><th></th><th id="th-vis"></th><th id="th-calc"></th><th id="th-avg"></th></tr>
+    </thead>
     <tbody>
       <tr><td id="td-bili">ビリルビン</td><td colspan="2"></td><td id="avgBili"></td></tr>
       <tr><td id="td-alb">アルブミン</td><td colspan="2"></td><td id="avgAlb"></td></tr>
@@ -81,39 +84,41 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 </section>
 
 <footer>
-  長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>
-  © 福本将之、江口 晋
+  長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>© 福本将之、江口 晋
 </footer>
 
 <script>
 /***** 多言語テキスト *****/
 const TXT={
-  jp:{
-    menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},
-    title:"PALBI 計算ツール",
-    labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},
-    btnCalc:"計算",low:"低値",mid:"中間",high:"高値",
-    about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,
-    tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},
-    desc:"ログイン・計算履歴",
-    alert:"値を全て入力してください",langBtn:"English"
-  },
-  en:{
-    menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},
-    title:"PALBI Calculator",
-    labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},
-    btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",
-    about:`The Platelet-Albumin-Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,
-    tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},
-    desc:"Visit & Calculation history",
-    alert:"Please enter all values",langBtn:"日本語"
-  }
+  jp:{menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},
+      title:"PALBI 計算ツール",
+      labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},
+      btnCalc:"計算",low:"低値",mid:"中間",high:"高値",
+      about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,
+      tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},
+      desc:"ログイン・計算履歴",alert:"値を全て入力してください",langBtn:"English"},
+  en:{menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},
+      title:"PALBI Calculator",
+      labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},
+      btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",
+      about:`The Platelet-Albumin-Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,
+      tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},
+      desc:"Visit & Calculation history",alert:"Please enter all values",langBtn:"日本語"}
 };
 
-/***** 初期化 *****/
+/***** グローバル state *****/
 let lang=localStorage.getItem("lang")||"jp";
+const keyHist="palbiHist",keyStat="palbiStat";
+let history=JSON.parse(localStorage.getItem(keyHist)||"[]");
+let stat   =JSON.parse(localStorage.getItem(keyStat)||"{}");
+stat.visits=(stat.visits||0)+1;
+saveStat();
+
+/***** 初期化 *****/
 renderUI();
 addEventHandlers();
+updateStats();
+updateHistory();
 
 /***** UI 再描画 *****/
 function renderUI(){
@@ -124,4 +129,7 @@ function renderUI(){
   ["calc","about","evidence","history"].forEach((k,i)=>mbtn[i].textContent=T.menu[k]);
   // ラベル
   document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
-  document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels
+  document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels.alb+" ";
+  document.getElementById("lb-plt").childNodes[0].nodeValue=T.labels.plt+" ";
+  document.getElementById("calcBtn").textContent=T.btnCalc;
+  ["z1","z2","
