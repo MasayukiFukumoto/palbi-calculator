@@ -17,8 +17,8 @@ input{width:160px;padding:.3rem}
 #calcBtn:hover{background:#004a99}
 #zones{margin-top:1rem;text-align:center}
 .zone{display:inline-block;width:30%;padding:.4rem;font-weight:bold;color:#fff;border-radius:4px}
-#z1{background:var(--c2)}#z2{background:var(--c3)}#z3{background:var(--c4)}.active{box-shadow:0 0 14px 4px rgba(0,0,0,.2)}
-#statsDesc{margin-top:.6rem;margin-bottom:.2rem;font-weight:600;text-align:center;font-size:.9rem}
+#z1{background:var(--c2)}#z2{background:var(--c3)}#z3{background:var(--c4)}.active{box-shadow:0 0 14px 4px rgba(0,0,0,.25)}
+#statsDesc{margin:.6rem 0;text-align:center;font-weight:600;font-size:.9rem}
 table{border-collapse:collapse;margin-top:.4rem;width:100%}
 td,th{border:1px solid #ccc;padding:.3rem;text-align:center;font-size:.9rem}
 footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
@@ -26,27 +26,29 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
 </style>
 </head>
 <body>
-<h1 id="title">PALBI 計算ツール</h1>
+<h1 id="title"></h1>
 
-<nav id="menu">
-  <button data-page="calc"   class="active">計算</button>
-  <button data-page="about">PALBIとは</button>
-  <button data-page="evidence">Evidence</button>
-  <button data-page="history">履歴</button>
-  <button id="langBtn">English</button>
+<nav>
+  <button data-page="calc" class="active"></button>
+  <button data-page="about"></button>
+  <button data-page="evidence"></button>
+  <button data-page="history"></button>
+  <button id="langBtn"></button>
 </nav>
 
 <!-- ===== 計算 ===== -->
 <section id="calc" class="page">
-  <label id="lb-bili">総ビリルビン (mg/dL): <input type="number" id="bili" step="0.1"></label>
-  <label id="lb-alb">アルブミン (g/dL): <input type="number" id="alb" step="0.1"></label>
-  <label id="lb-plt">血小板数 (万/µL): <input type="number" id="plt" step="1"></label>
-  <button id="calcBtn">計算</button>
+  <label id="lb-bili"><input type="number" id="bili" step="0.1"></label>
+  <label id="lb-alb"><input type="number" id="alb" step="0.1"></label>
+  <label id="lb-plt"><input type="number" id="plt" step="1"></label>
+  <button id="calcBtn"></button>
 
   <div id="result" style="margin-top:1rem;font-size:1.1rem"></div>
 
   <div id="zones">
-    <div class="zone" id="z1">低値</div><div class="zone" id="z2">中間</div><div class="zone" id="z3">高値</div>
+    <div class="zone" id="z1"></div>
+    <div class="zone" id="z2"></div>
+    <div class="zone" id="z3"></div>
   </div>
 
   <p id="statsDesc"></p>
@@ -56,80 +58,65 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
       <tr><th></th><th id="th-vis"></th><th id="th-calc"></th><th id="th-avg"></th></tr>
     </thead>
     <tbody>
-      <tr><td id="td-bili">ビリルビン</td><td colspan="2"></td><td id="avgBili"></td></tr>
-      <tr><td id="td-alb">アルブミン</td><td colspan="2"></td><td id="avgAlb"></td></tr>
-      <tr><td id="td-plt">血小板数</td><td colspan="2"></td><td id="avgPlt"></td></tr>
+      <tr><td id="td-bili"></td><td colspan="2"></td><td id="avgBili"></td></tr>
+      <tr><td id="td-alb"></td><td colspan="2"></td><td id="avgAlb"></td></tr>
+      <tr><td id="td-plt"></td><td colspan="2"></td><td id="avgPlt"></td></tr>
       <tr><td>PALBI</td><td id="vCount"></td><td id="cCount"></td><td id="avgScore"></td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- ===== PALBIとは ===== -->
 <section id="about" class="page" hidden>
   <p id="about-text"></p>
 </section>
 
-<!-- ===== Evidence ===== -->
 <section id="evidence" class="page" hidden>
-  <ol id="evi-list" style="font-size:.9rem">
-    <li>Liu P-H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879-886.</li>
-    <li>Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698-1705.</li>
-    <li>Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173.</li>
-  </ol>
+  <ol id="evi-list" style="font-size:.9rem"></ol>
 </section>
 
-<!-- ===== 履歴 ===== -->
 <section id="history" class="page" hidden>
   <ol id="histList" style="font-size:.9rem"></ol>
 </section>
 
-<footer>
-  長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>© 福本将之、江口 晋
-</footer>
+<footer></footer>
 
 <script>
-/***** 多言語テキスト *****/
 const TXT={
-  jp:{menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},
-      title:"PALBI 計算ツール",
-      labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},
-      btnCalc:"計算",low:"低値",mid:"中間",high:"高値",
-      about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,
-      tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},
-      desc:"ログイン・計算履歴",alert:"値を全て入力してください",langBtn:"English"},
-  en:{menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},
-      title:"PALBI Calculator",
-      labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},
-      btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",
-      about:`The Platelet-Albumin-Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,
-      tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},
-      desc:"Visit & Calculation history",alert:"Please enter all values",langBtn:"日本語"}
+ jp:{menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},title:"PALBI 計算ツール",labels:{bili:"総ビリルビリン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},btnCalc:"計算",low:"低値",mid:"中間",high:"高値",about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},desc:"ログイン・計算履歴",alert:"値を全て入力してください",footer:"長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>© 福本将之、江口 晋",langBtn:"English"},
+ en:{menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},title:"PALBI Calculator",labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",about:`The Platelet‑Albumin‑Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},desc:"Visit & Calculation history",alert:"Please enter all values",footer:"PALBI Calculator v2025‑05<br>© S. Eguchi, M. Fukumoto",langBtn:"日本語"}
 };
 
-/***** グローバル state *****/
 let lang=localStorage.getItem("lang")||"jp";
 const keyHist="palbiHist",keyStat="palbiStat";
 let history=JSON.parse(localStorage.getItem(keyHist)||"[]");
-let stat   =JSON.parse(localStorage.getItem(keyStat)||"{}");
-stat.visits=(stat.visits||0)+1;
-saveStat();
+let stat=JSON.parse(localStorage.getItem(keyStat)||"{}");
+stat.visits=(stat.visits||0)+1; saveStat();
 
-/***** 初期化 *****/
-renderUI();
-addEventHandlers();
-updateStats();
-updateHistory();
+document.addEventListener("DOMContentLoaded",()=>{
+ renderUI();
+ attachEvents();
+ updateStats();
+ updateHistory();
+});
 
-/***** UI 再描画 *****/
+function attachEvents(){
+ document.querySelectorAll("nav button[data-page]").forEach(btn=>btn.onclick=()=>switchPage(btn.dataset.page));
+ document.getElementById("langBtn").onclick=()=>{lang=lang==="jp"?"en":"jp";localStorage.setItem("lang",lang);renderUI();};
+ document.getElementById("calcBtn").onclick=calculate;
+}
+
+function switchPage(p){
+ document.querySelectorAll(".page").forEach(sec=>sec.hidden=true);
+ document.getElementById(p).hidden=false;
+ document.querySelectorAll("nav button[data-page]").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===p));
+}
+
 function renderUI(){
-  const T=TXT[lang];
-  document.getElementById("title").textContent=T.title;
-  // メニュー
-  const mbtn=document.querySelectorAll("nav button[data-page]");
-  ["calc","about","evidence","history"].forEach((k,i)=>mbtn[i].textContent=T.menu[k]);
-  // ラベル
-  document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
-  document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels.alb+" ";
-  document.getElementById("lb-plt").childNodes[0].nodeValue=T.labels.plt+" ";
-  document.getElementById("calcBtn").textContent=T.btnCalc;
-  ["z1","z2","
+ const T=TXT[lang];
+ // titles & menu
+ document.getElementById("title").innerHTML=T.title;
+ ["calc","about","evidence","history"].forEach((k,i)=>document.querySelectorAll("nav button[data-page]")[i].textContent=T.menu[k]);
+ document.getElementById("langBtn").textContent=T.langBtn;
+ // labels
+ document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
+ document.getElementById("lb-alb").childNodes
