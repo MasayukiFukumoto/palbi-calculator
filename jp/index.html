@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>長崎大学肝臓外科版 PALBI計算ツール v2025-05</title>
+<title>長崎大学肝臓外科版 PALBI計算ツール v2025‑05</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root{--c1:#0066cc;--c2:#4caf50;--c3:#ff9800;--c4:#f44336;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
@@ -36,7 +36,7 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   <button id="langBtn"></button>
 </nav>
 
-<!-- ===== 計算 ===== -->
+<!-- ===== 計算 ===== -->
 <section id="calc" class="page">
   <label id="lb-bili"><input type="number" id="bili" step="0.1"></label>
   <label id="lb-alb"><input type="number" id="alb" step="0.1"></label>
@@ -66,39 +66,45 @@ footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
   </table>
 </section>
 
+<!-- ===== PALBIとは ===== -->
 <section id="about" class="page" hidden>
   <p id="about-text"></p>
 </section>
 
+<!-- ===== Evidence ===== -->
 <section id="evidence" class="page" hidden>
   <ol id="evi-list" style="font-size:.9rem"></ol>
 </section>
 
+<!-- ===== 履歴 ===== -->
 <section id="history" class="page" hidden>
   <ol id="histList" style="font-size:.9rem"></ol>
 </section>
 
-<footer></footer>
+<footer id="footer"></footer>
 
 <script>
+/* ========== 多言語辞書 ========== */
 const TXT={
- jp:{menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},title:"PALBI 計算ツール",labels:{bili:"総ビリルビリン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},btnCalc:"計算",low:"低値",mid:"中間",high:"高値",about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},desc:"ログイン・計算履歴",alert:"値を全て入力してください",footer:"長崎大学肝臓外科版 PALBI計算ツール v2025-05<br>© 福本将之、江口 晋",langBtn:"English"},
- en:{menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},title:"PALBI Calculator",labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",about:`The Platelet‑Albumin‑Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},desc:"Visit & Calculation history",alert:"Please enter all values",footer:"PALBI Calculator v2025‑05<br>© S. Eguchi, M. Fukumoto",langBtn:"日本語"}
+ jp:{menu:{calc:"計算",about:"PALBIとは",evidence:"Evidence",history:"履歴"},title:"PALBI 計算ツール",labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},btnCalc:"計算",low:"低値",mid:"中間",high:"高値",about:`PALBI (Platelet‑Albumin‑Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板数・アルブミン・ビリルビンを用い、値が低いほど肝機能が良好です。`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数"},desc:"ログイン・計算履歴",alert:"値を全て入力してください",footer:"長崎大学肝臓外科版 PALBI計算ツール v2025‑05<br>© 福本将之、江口 晋",langBtn:"English"},
+ en:{menu:{calc:"Calculator",about:"About PALBI",evidence:"Evidence",history:"History"},title:"PALBI Calculator",labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",about:`The Platelet‑Albumin‑Bilirubin (PALBI) score assesses liver reserve and prognosis.<br>Lower scores indicate better hepatic function.`,evi:["Liu P‑H et al. (2017). <em>J Gastroenterol Hepatol</em> 32: 879‑886.","Zhu M et al. (2020). <em>Eur J Gastroenterol Hepatol</em> 32: 1698‑1705.","Lee S K et al. (2019). <em>PLoS ONE</em> 14: e0216173."],tbl:{login:"Visit Log",calc:"Calculation Log",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets"},desc:"Visit & Calculation history",alert:"Please enter all values",footer:"PALBI Calculator v2025‑05<br>© S. Eguchi, M. Fukumoto",langBtn:"日本語"}
 };
 
+/* ========== ストレージ ========== */
 let lang=localStorage.getItem("lang")||"jp";
 const keyHist="palbiHist",keyStat="palbiStat";
 let history=JSON.parse(localStorage.getItem(keyHist)||"[]");
 let stat=JSON.parse(localStorage.getItem(keyStat)||"{}");
-stat.visits=(stat.visits||0)+1; saveStat();
+stat.visits=(stat.visits||0)+1;
+saveStat();
 
-document.addEventListener("DOMContentLoaded",()=>{
- renderUI();
- attachEvents();
- updateStats();
- updateHistory();
-});
+/* ========== 初期化 ========== */
+renderUI();
+attachEvents();
+updateStats();
+updateHistory();
 
+/* ========== イベント */
 function attachEvents(){
  document.querySelectorAll("nav button[data-page]").forEach(btn=>btn.onclick=()=>switchPage(btn.dataset.page));
  document.getElementById("langBtn").onclick=()=>{lang=lang==="jp"?"en":"jp";localStorage.setItem("lang",lang);renderUI();};
@@ -111,12 +117,14 @@ function switchPage(p){
  document.querySelectorAll("nav button[data-page]").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===p));
 }
 
+/* ========== UI再描画 */
 function renderUI(){
  const T=TXT[lang];
- // titles & menu
+ // タイトルとメニュー
  document.getElementById("title").innerHTML=T.title;
  ["calc","about","evidence","history"].forEach((k,i)=>document.querySelectorAll("nav button[data-page]")[i].textContent=T.menu[k]);
  document.getElementById("langBtn").textContent=T.langBtn;
- // labels
+ // ラベル
  document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
- document.getElementById("lb-alb").childNodes
+ document.getElementById("lb-alb").childNodes[0].nodeValue=T.labels.alb+" ";
+ document.getElementById("lb-plt").childNodes
