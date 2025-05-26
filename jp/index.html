@@ -1,10 +1,15 @@
-<!-- ============== PALBI Calculator – fixed order v2025-05 ============== -->
-<!DOCTYPE html><html lang="ja"><head>
+<!-- =======================  PALBI Calculator – full fixed v2025-05 ======================= -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
 <meta charset="UTF-8">
 <title>長崎大学肝臓外科版 PALBI計算ツール v2025-05</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
- :root{--c1:#0066cc;--c2:#4caf50;--c3:#ff9800;--c4:#f44336;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
+ :root{
+   --c1:#0066cc;--c2:#4caf50;--c3:#ff9800;--c4:#f44336;
+   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif
+ }
  body{max-width:720px;margin:auto;padding:1.5rem}
  h1{color:var(--c1);text-align:center;font-size:1.6rem;margin:0 0 1rem}
  nav{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
@@ -24,7 +29,8 @@
  footer{margin-top:1.5rem;font-size:.8rem;text-align:center;color:#555}
  @media print{nav,#calcBtn,#histNav{display:none}}
 </style>
-</head><body>
+</head>
+<body>
 <h1 id="title">PALBI 計算ツール</h1>
 
 <nav>
@@ -68,7 +74,9 @@
 
 <!-- ===== 履歴 ===== -->
 <section id="history" class="page" hidden>
-  <div id="histNav"><button id="prevHist">&lt; Prev</button><span id="histRange"></span><button id="nextHist">Next &gt;</button></div>
+  <div id="histNav">
+    <button id="prevHist">&lt; Prev</button><span id="histRange"></span><button id="nextHist">Next &gt;</button>
+  </div>
   <ol id="histList" style="font-size:.9rem"></ol>
 
   <p id="tblCaption" style="font-size:.85rem;color:#333;margin-top:.6rem" hidden>ログイン履歴・計算履歴・平均</p>
@@ -94,86 +102,169 @@
 </footer>
 
 <script>
-/* ---------- Storage (最初に配置) ---------- */
-const keyHist="palbiHist", keyStat="palbiStat";
-let histData = JSON.parse(localStorage.getItem(keyHist)  ||"[]");
-let stat     = JSON.parse(localStorage.getItem(keyStat) ||"{}");
-stat.visits = (stat.visits||0)+1; saveStat();
-function saveStat(){localStorage.setItem(keyStat,JSON.stringify(stat));}
-function saveHist(){localStorage.setItem(keyHist,JSON.stringify(histData));}
+/* ---------- ローカルストレージ ---------- */
+const KEY_HIST="palbiHist", KEY_STAT="palbiStat";
+let histData = JSON.parse(localStorage.getItem(KEY_HIST)  || "[]");
+let stat     = JSON.parse(localStorage.getItem(KEY_STAT) || "{}");
+stat.visits  = (stat.visits || 0) + 1;
+saveStat();
+function saveStat(){ localStorage.setItem(KEY_STAT, JSON.stringify(stat)); }
+function saveHist(){ localStorage.setItem(KEY_HIST, JSON.stringify(histData)); }
 
-/* ---------- UI 状態 ---------- */
+/* ---------- 状態 ---------- */
 let lang = localStorage.getItem("palbiLang") || "jp";
 let currentHistPage = 0;
 
 /* ---------- 辞書 ---------- */
-const TXT={jp:{menu:{calc:"計算",about:"PALBIとは",refs:"参考文献",history:"履歴"},title:"PALBI 計算ツール",labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},btnCalc:"計算",low:"低値",mid:"中間",high:"高値",about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板・アルブミン・ビリルビンの 3 項目で算出し、値が低いほど肝機能が良好とされます。`,tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",bili:"ビリルビン",alb:"アルブミン",plt:"血小板数",avgCaption:"計算回数あたりの平均値"},histNav:{prev:"< 前",next:"次 >",range:(a,b,c)=>`${a}-${b} / ${c}`},langBtn:"English",alertFill:"値を全て入力してください"},en:{menu:{calc:"Calculator",about:"About PALBI",refs:"References",history:"History"},title:"PALBI Calculator",labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",about:`The Platelet-Albumin-Bilirubin (PALBI) score assesses liver dysfunction and prognosis.<br>It is calculated from platelet count, albumin, and bilirubin; lower scores indicate better hepatic reserve.`,tbl:{login:"Visits",calc:"Calculations",avg:"Average",bili:"Bilirubin",alb:"Albumin",plt:"Platelets",avgCaption:"Averages per calculation"},histNav:{prev:"< Prev",next:"Next >",range:(a,b,c)=>`${a}-${b} / ${c}`},langBtn:"日本語",alertFill:"Please fill all fields"}};
-
-/* ---------- renderUI ---------- */
-function renderUI(){
-  const T=TXT[lang];
-  const mb=document.querySelectorAll("nav button[data-page]");
-  ["calc","about","refs","history"].forEach((k,i)=>mb[i].textContent=T.menu[k]);
-  title.textContent=T.title;
-  lb-bili.childNodes[0].nodeValue=T.labels.bili+" ";
-  lb-alb.childNodes[0].nodeValue=T.labels.alb+" ";
-  lb-plt.childNodes[0].nodeValue=T.labels.plt+" ";
-  calcBtn.textContent=T.btnCalc;
-  z1.textContent=T.low; z2.textContent=T.mid; z3.textContent=T.high;
-  about-text.innerHTML=T.about;
-  th-vis.textContent=T.tbl.login; th-calc.textContent=T.tbl.calc; th-avg.textContent=T.tbl.avg;
-  td-bili.textContent=T.tbl.bili; td-alb.textContent=T.tbl.alb; td-plt.textContent=T.tbl.plt;
-  tblCaption.textContent=`${T.tbl.login}・${T.tbl.calc}・${T.tbl.avg}`;
-  avgCaption.textContent=T.tbl.avgCaption;
-  prevHist.textContent=T.histNav.prev; nextHist.textContent=T.histNav.next;
-  langBtn.textContent=T.langBtn;
-  updateStats();
-  if(!history.hidden) updateHistory();
-}
-renderUI();
-
-/* ---------- ナビ切替 ---------- */
-document.querySelectorAll("nav button[data-page]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".page").forEach(s=>s.hidden=true);document.getElementById(b.dataset.page).hidden=false;document.querySelectorAll("nav button[data-page]").forEach(x=>x.classList.toggle("active",x===b));if(b.dataset.page==="history")updateHistory();});
-
-/* ---------- 言語切替 ---------- */
-langBtn.onclick=()=>{lang=lang==="jp"?"en":"jp";localStorage.setItem("palbiLang",lang);renderUI();};
-
-/* ---------- 計算 ---------- */
-calcBtn.onclick=()=>{
-  const bili=parseFloat(bili.value),alb=parseFloat(alb.value),plt=parseFloat(plt.value);
-  if([bili,alb,plt].some(isNaN)){alert(TXT[lang].alertFill);return;}
-  const bili_umol=bili*17.1, alb_gL=alb*10, plt_1000=plt*10;
-  const logB=Math.log10(bili_umol), logP=Math.log10(plt_1000);
-  const score=+(2.02*logB-0.37*logB**2-0.04*alb_gL-3.48*logP+1.01*logP**2).toFixed(2);
-  const grade=score<=-2.53?1:score<=-2.09?2:3;
-  result.textContent=`PALBI: ${score} (G${grade})`;
-  ["z1","z2","z3"].forEach(id=>document.getElementById(id).classList.remove("active"));document.getElementById("z"+grade).classList.add("active");
-  stat.calc=(stat.calc||0)+1;stat.sumB=(stat.sumB||0)+bili;stat.sumA=(stat.sumA||0)+alb;stat.sumP=(stat.sumP||0)+plt;stat.sumS=(stat.sumS||0)+score;saveStat();
-  histData.push({bili,alb,plt,score});saveHist();
-  updateStats();if(!history.hidden)updateHistory();
+const TXT = {
+  jp:{
+    menu:{calc:"計算",about:"PALBIとは",refs:"参考文献",history:"履歴"},
+    title:"PALBI 計算ツール",
+    labels:{bili:"総ビリルビン (mg/dL):",alb:"アルブミン (g/dL):",plt:"血小板数 (万/µL):"},
+    btnCalc:"計算",low:"低値",mid:"中間",high:"高値",
+    about:`PALBI (Platelet-Albumin-Bilirubin) スコアは、肝障害の重症度や予後を評価する指標です。<br>血小板・アルブミン・ビリルビンの 3 項目で算出し、値が低いほど肝機能が良好とされます。`,
+    tbl:{login:"ログイン履歴",calc:"計算履歴",avg:"平均",avgCaption:"計算回数あたりの平均値"},
+    histNav:{prev:"< 前",next:"次 >",range:(a,b,c)=>`${a}-${b} / ${c}`},
+    langBtn:"English",alertFill:"値を全て入力してください"
+  },
+  en:{
+    menu:{calc:"Calculator",about:"About PALBI",refs:"References",history:"History"},
+    title:"PALBI Calculator",
+    labels:{bili:"Total Bilirubin (mg/dL):",alb:"Albumin (g/dL):",plt:"Platelets (×10³/µL):"},
+    btnCalc:"Calculate",low:"Low",mid:"Intermediate",high:"High",
+    about:`The Platelet-Albumin-Bilirubin (PALBI) score assesses liver dysfunction and prognosis.<br>It is calculated from platelet count, albumin, and bilirubin; lower scores indicate better hepatic reserve.`,
+    tbl:{login:"Visits",calc:"Calculations",avg:"Average",avgCaption:"Averages per calculation"},
+    histNav:{prev:"< Prev",next:"Next >",range:(a,b,c)=>`${a}-${b} / ${c}`},
+    langBtn:"日本語",alertFill:"Please fill all fields"
+  }
 };
 
-/* ---------- Stats ---------- */
-function updateStats(){
-  statsTable.hidden=tblCaption.hidden=false;
-  vCount.textContent=stat.visits; cCount.textContent=stat.calc||0;
-  const avg=k=>stat.calc?(stat[k]/stat.calc).toFixed(2):"-";
-  avgBili.textContent=avg("sumB");avgAlb.textContent=avg("sumA");avgPlt.textContent=avg("sumP");avgScore.textContent=avg("sumS");
-  avgTable.hidden=false;avgBili2.textContent=avg("sumB");avgAlb2.textContent=avg("sumA");avgPlt2.textContent=avg("sumP");avgScore2.textContent=avg("sumS");
+/* ---------- UI 初期描画 ---------- */
+renderUI();
+
+/* ---------- ナビ／言語ボタン ---------- */
+document.querySelectorAll("nav button[data-page]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".page").forEach(sec=>sec.hidden=true);
+    document.getElementById(btn.dataset.page).hidden=false;
+    document.querySelectorAll("nav button[data-page]").forEach(b=>b.classList.toggle("active",b===btn));
+    if(btn.dataset.page==="history") updateHistory();
+  });
+});
+document.getElementById("langBtn").onclick=()=>{
+  lang = lang==="jp" ? "en" : "jp";
+  localStorage.setItem("palbiLang",lang);
+  renderUI();
+};
+
+/* ---------- 計算ボタン ---------- */
+document.getElementById("calcBtn").onclick=()=>{
+  const bili=parseFloat(document.getElementById("bili").value),
+        alb =parseFloat(document.getElementById("alb").value),
+        plt =parseFloat(document.getElementById("plt").value);
+  if([bili,alb,plt].some(isNaN)){ alert(TXT[lang].alertFill); return; }
+
+  // 単位変換 & 計算
+  const bili_umol=bili*17.1, alb_gL=alb*10, plt_1000=plt*10;
+  const logB=Math.log10(bili_umol), logP=Math.log10(plt_1000);
+  const palbi=2.02*logB-0.37*logB**2-0.04*alb_gL-3.48*logP+1.01*logP**2;
+  const score = +palbi.toFixed(2);
+  const grade = score<=-2.53 ? 1 : score<=-2.09 ? 2 : 3;
+
+  // 結果表示
+  document.getElementById("result").textContent=`PALBI: ${score} (G${grade})`;
+  ["z1","z2","z3"].forEach(id=>document.getElementById(id).classList.remove("active"));
+  document.getElementById("z"+grade).classList.add("active");
+
+  // ステータス更新
+  stat.calc=(stat.calc||0)+1;
+  stat.sumB=(stat.sumB||0)+bili; stat.sumA=(stat.sumA||0)+alb;
+  stat.sumP=(stat.sumP||0)+plt;  stat.sumS=(stat.sumS||0)+score;
+  saveStat();
+
+  // 履歴追加
+  histData.push({bili,alb,plt,score}); saveHist();
+
+  // 表再描画
+  updateStats();
+  if(!document.getElementById("history").hidden) updateHistory();
+};
+
+/* ---------- 関数群 ---------- */
+function renderUI(){
+  const T = TXT[lang];
+  // ナビ
+  const navBtns=document.querySelectorAll("nav button[data-page]");
+  ["calc","about","refs","history"].forEach((k,i)=>navBtns[i].textContent=T.menu[k]);
+  document.getElementById("title").textContent=T.title;
+  // ラベル
+  document.getElementById("lb-bili").childNodes[0].nodeValue=T.labels.bili+" ";
+  document.getElementById("lb-alb" ).childNodes[0].nodeValue=T.labels.alb +" ";
+  document.getElementById("lb-plt" ).childNodes[0].nodeValue=T.labels.plt +" ";
+  document.getElementById("calcBtn").textContent=T.btnCalc;
+  document.getElementById("z1").textContent=T.low;
+  document.getElementById("z2").textContent=T.mid;
+  document.getElementById("z3").textContent=T.high;
+  document.getElementById("about-text").innerHTML=T.about;
+  // テーブル見出し
+  document.getElementById("th-vis").textContent=T.tbl.login;
+  document.getElementById("th-calc").textContent=T.tbl.calc;
+  document.getElementById("th-avg").textContent=T.tbl.avg;
+  document.getElementById("td-bili").textContent=T.labels.bili.split(" ")[0];
+  document.getElementById("td-alb").textContent=T.labels.alb .split(" ")[0];
+  document.getElementById("td-plt").textContent=T.labels.plt .split(" ")[0];
+  document.getElementById("tblCaption").textContent=`${T.tbl.login}・${T.tbl.calc}・${T.tbl.avg}`;
+  document.getElementById("avgCaption").textContent=T.tbl.avgCaption;
+  // 履歴ナビ
+  document.getElementById("prevHist").textContent=T.histNav.prev;
+  document.getElementById("nextHist").textContent=T.histNav.next;
+  // 言語ボタン
+  document.getElementById("langBtn").textContent=T.langBtn;
+  // 数値更新
+  updateStats();
 }
 
-/* ---------- History ---------- */
+function updateStats(){
+  const tbl=document.getElementById("statsTable");
+  const cap=document.getElementById("tblCaption");
+  tbl.hidden = cap.hidden = false;
+
+  document.getElementById("vCount").textContent=stat.visits;
+  document.getElementById("cCount").textContent=stat.calc||0;
+  const avg=k=>stat.calc?(stat[k]/stat.calc).toFixed(2):"-";
+  document.getElementById("avgBili").textContent=avg("sumB");
+  document.getElementById("avgAlb" ).textContent=avg("sumA");
+  document.getElementById("avgPlt" ).textContent=avg("sumP");
+  document.getElementById("avgScore").textContent=avg("sumS");
+
+  document.getElementById("avgTable").hidden=false;
+  document.getElementById("avgBili2").textContent=avg("sumB");
+  document.getElementById("avgAlb2" ).textContent=avg("sumA");
+  document.getElementById("avgPlt2" ).textContent=avg("sumP");
+  document.getElementById("avgScore2").textContent=avg("sumS");
+}
+
 const PAGE_SIZE=10;
-prevHist.onclick=()=>{if(currentHistPage<historyPages()-1){currentHistPage++;updateHistory();}};
-nextHist.onclick=()=>{if(currentHistPage>0){currentHistPage--;updateHistory();}};
-function historyPages(){return Math.ceil(histData.length/PAGE_SIZE);}
+document.getElementById("prevHist").onclick=()=>{if(currentHistPage<historyPages()-1){currentHistPage++;updateHistory();}};
+document.getElementById("nextHist").onclick=()=>{if(currentHistPage>0){currentHistPage--;updateHistory();}};
+
+function historyPages(){ return Math.ceil(histData.length/PAGE_SIZE); }
 function updateHistory(){
-  histList.innerHTML="";
-  const total=histData.length,start=Math.max(0,total-PAGE_SIZE*(currentHistPage+1)),to=total-PAGE_SIZE*currentHistPage;
-  histData.slice(start,to).forEach((x,i)=>histList.insertAdjacentHTML("beforeend",`<li>${start+i+1}: Bili ${x.bili}, Alb ${x.alb}, Plt ${x.plt}, Score ${x.score}</li>`));
-  histRange.textContent=TXT[lang].histNav.range(start+1,to,total);
-  prevHist.disabled=currentHistPage>=historyPages()-1;nextHist.disabled=currentHistPage===0;
+  const list=document.getElementById("histList");
+  list.innerHTML="";
+  const total=histData.length;
+  const start=Math.max(0,total-PAGE_SIZE*(currentHistPage+1));
+  const end  =total-PAGE_SIZE*currentHistPage;
+  histData.slice(start,end).forEach((x,i)=>{
+    list.insertAdjacentHTML("beforeend",
+      `<li>${start+i+1}: Bili ${x.bili}, Alb ${x.alb}, Plt ${x.plt}, Score ${x.score}</li>`);
+  });
+  const T=TXT[lang].histNav;
+  document.getElementById("histRange").textContent=T.range(start+1,end,total);
+  document.getElementById("prevHist").disabled=currentHistPage>=historyPages()-1;
+  document.getElementById("nextHist").disabled=currentHistPage===0;
 }
 updateHistory();
 </script>
-</body></html>
+</body>
+</html>
